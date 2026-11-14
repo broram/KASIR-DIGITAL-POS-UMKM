@@ -31,6 +31,7 @@ void main() {
     final transaction = SaleTransaction(
       id: 'TRX-001',
       createdAt: DateTime(2026, 10, 25),
+      cashierName: 'Ramdan',
       items: [CartItem(product: product, quantity: 2)],
       amountPaid: 30000,
     );
@@ -45,6 +46,7 @@ void main() {
       () => SaleTransaction(
         id: 'TRX-002',
         createdAt: DateTime(2026, 10, 25),
+        cashierName: 'Ramdan',
         items: const [],
         amountPaid: 0,
       ),
@@ -54,6 +56,7 @@ void main() {
       () => SaleTransaction(
         id: 'TRX-003',
         createdAt: DateTime(2026, 10, 25),
+        cashierName: 'Ramdan',
         items: [CartItem(product: product)],
         amountPaid: 0,
       ),

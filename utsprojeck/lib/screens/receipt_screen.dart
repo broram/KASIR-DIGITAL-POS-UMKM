@@ -1,23 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../models/sale_transaction.dart';
+import '../utils/format_date_time.dart';
 import '../utils/format_rupiah.dart';
 
 class ReceiptScreen extends StatelessWidget {
   const ReceiptScreen({super.key, required this.transaction});
 
   final SaleTransaction transaction;
-
-  String _formatDateTime(DateTime dateTime) {
-    final localTime = dateTime.toLocal();
-    final date =
-        '${localTime.day.toString().padLeft(2, '0')}/'
-        '${localTime.month.toString().padLeft(2, '0')}/${localTime.year}';
-    final time =
-        '${localTime.hour.toString().padLeft(2, '0')}:'
-        '${localTime.minute.toString().padLeft(2, '0')}';
-    return '$date $time';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +48,13 @@ class ReceiptScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Kasir UMKM', style: textTheme.titleLarge),
+                        Text(
+                          transaction.cashierName,
+                          style: textTheme.titleLarge,
+                        ),
                         const SizedBox(height: 4),
                         Text('ID transaksi: ${transaction.id}'),
-                        Text(
-                          'Waktu: ${_formatDateTime(transaction.createdAt)}',
-                        ),
+                        Text('Waktu: ${formatDateTime(transaction.createdAt)}'),
                         const Divider(height: 28),
                         ...transaction.items.map(
                           (item) => Padding(

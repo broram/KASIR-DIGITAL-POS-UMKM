@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:utsprojeck/controllers/cart_controller.dart';
+import 'package:utsprojeck/models/sale_transaction.dart';
 import 'package:utsprojeck/models/product.dart';
 import 'package:utsprojeck/screens/cart_screen.dart';
 import 'package:utsprojeck/screens/payment_screen.dart';
+import 'package:utsprojeck/services/transaction_history_service.dart';
 
 void main() {
   final coffee = Product(id: 1, name: 'Kopi Susu', price: 15000);
@@ -67,10 +69,17 @@ void main() {
     tester,
   ) async {
     final cart = CartController()..add(coffee);
+    final history = _MemoryTransactionHistoryService();
     addTearDown(cart.dispose);
 
     await tester.pumpWidget(
-      MaterialApp(home: PaymentScreen(cartController: cart)),
+      MaterialApp(
+        home: PaymentScreen(
+          cartController: cart,
+          historyService: history,
+          cashierName: 'Ramdan',
+        ),
+      ),
     );
 
     await tester.tap(find.text('Bayar dan selesaikan'));
@@ -93,11 +102,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Transaksi berhasil'), findsOneWidget);
+    expect(find.text('Ramdan'), findsOneWidget);
     expect(find.text('Kopi Susu'), findsOneWidget);
     expect(find.text('1 x Rp 15.000'), findsOneWidget);
     expect(find.text('Uang diterima'), findsOneWidget);
     expect(cart.items, isEmpty);
     expect(cart.total, 0);
+    expect(history.savedTransactions, hasLength(1));
+    expect(history.savedTransactions.single.cashierName, 'Ramdan');
   });
 
   testWidgets('canceling confirmation keeps the cart unchanged', (
@@ -119,4 +131,51 @@ void main() {
     expect(cart.items, hasLength(1));
     expect(find.text('Transaksi berhasil'), findsNothing);
   });
+
+  testWidgets(
+    'failed history save keeps the cart and does not show a receipt',
+    (tester) async {
+      final cart = CartController()..add(coffee);
+      addTearDown(cart.dispose);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: PaymentScreen(
+            cartController: cart,
+            historyService: _FailingTransactionHistoryService(),
+          ),
+        ),
+      );
+      await tester.enterText(find.byType(TextFormField), '20000');
+      await tester.tap(find.text('Bayar dan selesaikan'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Konfirmasi'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Transaksi gagal disimpan.'), findsOneWidget);
+      expect(cart.items, hasLength(1));
+      expect(cart.total, 15000);
+      expect(find.text('Transaksi berhasil'), findsNothing);
+    },
+  );
+}
+
+class _MemoryTransactionHistoryService extends TransactionHistoryService {
+  final savedTransactions = <SaleTransaction>[];
+
+  @override
+  Future<void> save(SaleTransaction transaction) async {
+    savedTransactions.add(transaction);
+  }
+
+  @override
+  Future<List<SaleTransaction>> loadAll() async =>
+      List.unmodifiable(savedTransactions);
+}
+
+class _FailingTransactionHistoryService extends TransactionHistoryService {
+  @override
+  Future<void> save(SaleTransaction transaction) async {
+    throw const TransactionPersistenceException('Transaksi gagal disimpan.');
+  }
 }

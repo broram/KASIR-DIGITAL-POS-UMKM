@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 
 import '../controllers/cart_controller.dart';
+import '../services/transaction_history_service.dart';
 import '../utils/format_rupiah.dart';
 import 'payment_screen.dart';
 
 class CartScreen extends StatelessWidget {
-  const CartScreen({super.key, required this.cartController});
+  const CartScreen({
+    super.key,
+    required this.cartController,
+    this.historyService,
+    this.cashierName = 'Kasir',
+  });
 
   final CartController cartController;
+  final TransactionHistoryService? historyService;
+  final String cashierName;
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +163,8 @@ class CartScreen extends StatelessWidget {
                                   MaterialPageRoute<void>(
                                     builder: (_) => PaymentScreen(
                                       cartController: cartController,
+                                      historyService: historyService,
+                                      cashierName: cashierName,
                                     ),
                                   ),
                                 );

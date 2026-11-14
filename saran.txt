@@ -1,0 +1,65 @@
+Kalau aku menilai sebagai dosen, ini yang akan kupertanyakan, dari yang paling berat.
+
+1. Alurnya belum utuh. Proposalmu sendiri menulis pembayaran, konfirmasi, dan struk sebagai fitur inti, tetapi aplikasinya baru sampai keranjang. SaleTransaction sudah dibuat tapi tidak dipakai di UI. Saat demo, alur “pilih barang sampai struk” tidak bisa diperagakan. Dosen biasanya menilai apa yang bisa dijalankan, bukan apa yang dijanjikan.
+
+2. Masalah di latar belakang tidak terjawab oleh solusinya. Kamu menulis bahwa pencatatan manual membuat pemilik sulit tahu barang apa yang terjual dan riwayat sulit ditelusuri. Tapi riwayat transaksi masuk “pengembangan lanjutan”, jadi aplikasimu tidak menyelesaikan masalah yang kamu angkat. Minimal sediakan riwayat di memori, atau ubah latar belakang agar sesuai cakupan.
+
+3. Prioritas yang terbalik. Login yang kita tambahkan tadi justru lebih rendah nilainya daripada pembayaran dan struk. Kritikus akan bertanya apa yang dilindungi login lokal tanpa server dan tanpa data sensitif. PIN 4–6 digit mudah ditebak walaupun di-hash, jadi sebut ini sebagai penanda nama kasir saja, jangan sebagai keamanan. Kerjakan setelah alur inti selesai.
+
+4. Bukti Modul 4 lemah. Proposal memetakan T4 ke REST API, http, dan Provider. Implementasinya JSON lokal, tanpa http, dengan ChangeNotifier. Itu sah, tetapi kamu harus bisa menjelaskan alasannya, atau menambah satu pemanggilan HTTP GET sederhana.
+
+5. Pengujian dan bukti kerja kurang. Delapan tes belum menyentuh pembayaran. Belum ada screenshot, rekaman demo, atau APK, dan belum ada catatan uji di perangkat atau ukuran layar berbeda.
+
+6. Kualitas dokumen. Jadwal masih kosong, daftar pustaka belum lengkap, dan nama anggota kelompok serta pembagian tugas belum ada. Dosen juga sering mengharapkan diagram analisis, misalnya use case dan activity diagram, bukan hanya alur teks.
+
+7. Kegunaan nyata terbatas. Produk hanya delapan data statis, tanpa tambah produk, stok, atau penyimpanan. Keranjang hilang saat aplikasi ditutup. Untuk prototipe UTS ini wajar, asalkan kamu menyebutnya terang-terangan di presentasi.
+
+Urutan yang kusarankan:
+
+Pembayaran, kembalian, dan struk.
+Tes untuk alur itu.
+Riwayat transaksi sederhana di memori.
+Screenshot, rekaman demo, dan APK.
+Rapikan proposal: jadwal, anggota, diagram.
+Login, hanya kalau waktunya masih ada dan dosen menghendaki.
+
+jawab disini :
+
+Analisis terbaru berdasarkan kode aplikasi:
+
+Beberapa penilaian di atas sudah tidak sesuai dengan kondisi program sekarang. Saya menelusuri source code serta menjalankan tes dan analisis statis.
+
+Yang sudah tersedia:
+1. Alur transaksi inti sudah dapat didemonstrasikan: katalog -> keranjang -> pembayaran -> konfirmasi -> struk. `SaleTransaction` sudah digunakan di layar pembayaran, bukan hanya dibuat sebagai model.
+2. Katalog memuat 8 produk dari JSON lokal, menampilkan status loading/error dan tombol coba lagi.
+3. Keranjang mendukung tambah, kurangi, hapus barang, serta menghitung subtotal dan total.
+4. Pembayaran tunai memvalidasi nominal kosong/tidak valid/kurang, menghitung kembalian, dan meminta konfirmasi. Keranjang baru dikosongkan setelah transaksi dikonfirmasi.
+5. Struk menampilkan ID dan waktu transaksi, rincian produk, total, pembayaran, serta kembalian.
+6. Ada validasi model dan pengujian untuk katalog, keranjang, pembayaran, pembatalan konfirmasi, struk, dan ukuran layar.
+7. Verifikasi terakhir: `flutter test` lulus 13 tes dan `flutter analyze` tidak menemukan masalah.
+
+Yang masih belum tersedia:
+1. Riwayat dan penyimpanan transaksi permanen. Struk muncul setelah transaksi, tetapi transaksi tidak tersimpan untuk dilihat lagi setelah aplikasi ditutup.
+2. CRUD produk, stok, pencarian/kategori, dan tampilan foto produk. Model memiliki `imageUrl`, tetapi kartu katalog saat ini menggunakan ikon.
+3. Login/nama kasir belum ada di aplikasi. Karena itu, jangan tulis bahwa login sudah ditambahkan; login PIN lokal juga bukan pengamanan yang kuat dan sebaiknya tidak diprioritaskan kecuali diminta dosen.
+4. Belum ada pembayaran elektronik, cetak/bagikan struk, maupun bukti pengujian perangkat nyata, screenshot, rekaman demo, dan APK final.
+5. Untuk materi REST API: katalog sekarang memakai JSON lokal. Ini dapat dipertahankan bila sesuai rubrik, tetapi jelaskan alasannya; tambahkan HTTP GET hanya jika memang diwajibkan.
+6. Proposal masih perlu dilengkapi pada bagian yang berupa placeholder seperti anggota kelompok, pembagian tugas, jadwal, dan referensi/modul; diagram analisis juga bisa ditambahkan bila diminta rubrik.
+
+Catatan untuk masalah dan ruang lingkup:
+Transaksi saat ini sudah bisa diselesaikan, tetapi belum ada riwayat yang bisa ditelusuri. Jika latar belakang tetap menekankan pentingnya melihat barang terjual dan menelusuri transaksi sebelumnya, tambahkan penyimpanan/riwayat sederhana. Jika waktu UTS terbatas, ubah latar belakang dan batasan agar jelas bahwa aplikasi hanya mencatat satu transaksi sampai struk pada sesi berjalan.
+
+Urutan saran yang disesuaikan:
+1. Cocokkan kebutuhan REST API dan riwayat transaksi dengan rubrik/dosen; prioritaskan hanya yang diwajibkan.
+2. Lengkapi bukti presentasi: screenshot, demo alur dari katalog sampai struk, dan uji pada perangkat sasaran.
+3. Rapikan proposal: jadwal, anggota/pembagian tugas, diagram, dan batasan yang sesuai implementasi.
+4. Tambahkan riwayat/persistensi jika penelusuran transaksi memang menjadi tujuan utama.
+5. Login, stok, CRUD produk, dan pembayaran digital menjadi pengembangan berikutnya, bukan penghalang untuk menyelesaikan alur inti yang sekarang sudah berjalan.
+
+Status setelah pengembangan berikutnya:
+- Riwayat dan penyimpanan transaksi permanen lokal sudah ditambahkan dengan SQLite; data tersimpan setelah transaksi dikonfirmasi.
+- Login nama kasir dan PIN lokal sudah ditambahkan. Profil dibuat pada pemakaian pertama; PIN tidak ditanam di source code, melainkan dibuat saat setup dan disimpan sebagai hash bersalt di penyimpanan aman perangkat.
+- Riwayat transaksi dapat dibuka dari katalog, dan nama kasir tercantum pada struk.
+- Verifikasi terakhir: 21 tes lulus, `flutter analyze` tanpa masalah, dan APK debug Android berhasil dibangun.
+- Yang masih perlu dikerjakan: uji pada perangkat nyata, screenshot/demo, dan sinkronisasi cloud atau multi-kasir bila diminta.
+

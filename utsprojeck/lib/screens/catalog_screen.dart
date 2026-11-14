@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../controllers/cart_controller.dart';
 import '../models/product.dart';
+import '../services/transaction_history_service.dart';
 import '../utils/format_rupiah.dart';
 import 'cart_screen.dart';
+import 'transaction_history_screen.dart';
 
 typedef ProductLoader = Future<List<Product>> Function();
 
@@ -12,10 +14,16 @@ class CatalogScreen extends StatefulWidget {
     super.key,
     required this.cartController,
     required this.loadProducts,
+    this.historyService,
+    this.cashierName = 'Kasir',
+    this.onLogout,
   });
 
   final CartController cartController;
   final ProductLoader loadProducts;
+  final TransactionHistoryService? historyService;
+  final String cashierName;
+  final VoidCallback? onLogout;
 
   @override
   State<CatalogScreen> createState() => _CatalogScreenState();
@@ -39,7 +47,23 @@ class _CatalogScreenState extends State<CatalogScreen> {
   void _openCart() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => CartScreen(cartController: widget.cartController),
+        builder: (_) => CartScreen(
+          cartController: widget.cartController,
+          historyService: widget.historyService,
+          cashierName: widget.cashierName,
+        ),
+      ),
+    );
+  }
+
+  void _openHistory() {
+    final historyService = widget.historyService;
+    if (historyService == null) return;
+
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            TransactionHistoryScreen(historyService: historyService),
       ),
     );
   }
@@ -48,32 +72,45 @@ class _CatalogScreenState extends State<CatalogScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Kasir UMKM'),
+            const Text('Kasir UMKM'),
             Text(
-              'Katalog produk',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.normal),
+              'Kasir: ${widget.cashierName}',
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ],
         ),
         actions: [
+          if (widget.historyService != null)
+            IconButton(
+              tooltip: 'Riwayat transaksi',
+              onPressed: _openHistory,
+              icon: const Icon(Icons.history),
+            ),
           AnimatedBuilder(
             animation: widget.cartController,
-            builder: (context, _) => Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: IconButton(
-                tooltip: 'Buka keranjang',
-                onPressed: _openCart,
-                icon: Badge(
-                  label: Text('${widget.cartController.itemCount}'),
-                  isLabelVisible: widget.cartController.itemCount > 0,
-                  child: const Icon(Icons.shopping_bag_outlined),
-                ),
+            builder: (context, _) => IconButton(
+              tooltip: 'Buka keranjang',
+              onPressed: _openCart,
+              icon: Badge(
+                label: Text('${widget.cartController.itemCount}'),
+                isLabelVisible: widget.cartController.itemCount > 0,
+                child: const Icon(Icons.shopping_bag_outlined),
               ),
             ),
           ),
+          if (widget.onLogout != null)
+            IconButton(
+              tooltip: 'Keluar',
+              onPressed: widget.onLogout,
+              icon: const Icon(Icons.logout),
+            ),
+          const SizedBox(width: 8),
         ],
       ),
       body: FutureBuilder<List<Product>>(

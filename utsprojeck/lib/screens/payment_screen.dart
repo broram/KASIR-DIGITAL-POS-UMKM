@@ -3,13 +3,21 @@ import 'package:flutter/services.dart';
 
 import '../controllers/cart_controller.dart';
 import '../models/sale_transaction.dart';
+import '../services/transaction_history_service.dart';
 import '../utils/format_rupiah.dart';
 import 'receipt_screen.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key, required this.cartController});
+  const PaymentScreen({
+    super.key,
+    required this.cartController,
+    this.historyService,
+    this.cashierName = 'Kasir',
+  });
 
   final CartController cartController;
+  final TransactionHistoryService? historyService;
+  final String cashierName;
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -54,9 +62,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final amountPaid = int.parse(_paymentController.text);
+    final createdAt = DateTime.now();
     final transaction = SaleTransaction(
-      id: 'TRX-${DateTime.now().microsecondsSinceEpoch}',
-      createdAt: DateTime.now(),
+      id: 'TRX-${createdAt.microsecondsSinceEpoch}',
+      createdAt: createdAt,
+      cashierName: widget.cashierName,
       items: widget.cartController.items,
       amountPaid: amountPaid,
     );
@@ -95,10 +105,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
     if (!mounted) return;
 
-    setState(() {
-      _isConfirming = false;
-    });
-    if (confirmed != true) return;
+    if (confirmed != true) {
+      setState(() {
+        _isConfirming = false;
+      });
+      return;
+    }
+
+    final historyService = widget.historyService;
+    if (historyService != null) {
+      try {
+        await historyService.save(transaction);
+      } on TransactionPersistenceException catch (error) {
+        if (!mounted) return;
+        setState(() {
+          _isConfirming = false;
+        });
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.message)));
+        return;
+      }
+    }
+    if (!mounted) return;
 
     widget.cartController.clear();
     await Navigator.of(context).pushReplacement(
