@@ -53,8 +53,8 @@ void main() {
         find.byKey(const Key('cashier-pin-confirm')),
         '2468',
       );
-      await tester.ensureVisible(find.text('Buat profil dan masuk'));
-      await tester.tap(find.text('Buat profil dan masuk'));
+      await tester.ensureVisible(find.text('Buat profil'));
+      await tester.tap(find.text('Buat profil'));
       await tester.pumpAndSettle();
 
       expect(controller.isLoggedIn, isTrue);

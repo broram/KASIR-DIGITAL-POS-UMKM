@@ -75,7 +75,14 @@ class _CatalogScreenState extends State<CatalogScreen> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Kasir UMKM'),
+            const Text(
+              'KASIR DIGITAL',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.2,
+              ),
+            ),
             Text(
               'Kasir: ${widget.cashierName}',
               style: const TextStyle(
