@@ -5,6 +5,7 @@ import '../controllers/cart_controller.dart';
 import '../models/sale_transaction.dart';
 import '../services/transaction_history_service.dart';
 import '../utils/format_rupiah.dart';
+import '../widgets/botanical_decor.dart';
 import 'receipt_screen.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -161,42 +162,39 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 20),
-              Card(
-                margin: EdgeInsets.zero,
+              SoftCard(
                 color: colorScheme.primaryContainer,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.receipt_long_outlined,
-                        color: colorScheme.onPrimaryContainer,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Total tagihan',
-                              style: TextStyle(
-                                color: colorScheme.onPrimaryContainer,
-                              ),
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.receipt_long_outlined,
+                      color: colorScheme.onPrimaryContainer,
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Total tagihan',
+                            style: TextStyle(
+                              color: colorScheme.onPrimaryContainer,
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              formatRupiah(_total),
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(
-                                    color: colorScheme.onPrimaryContainer,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            formatRupiah(_total),
+                            style: Theme.of(context).textTheme.headlineSmall
+                                ?.copyWith(
+                                  color: colorScheme.onPrimaryContainer,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 24),
@@ -225,22 +223,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              Card(
-                margin: EdgeInsets.zero,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.currency_exchange_outlined),
-                      const SizedBox(width: 12),
-                      const Expanded(child: Text('Kembalian')),
-                      Text(
-                        change == null ? '—' : formatRupiah(change),
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
+              SoftCard(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    const Icon(Icons.currency_exchange_outlined),
+                    const SizedBox(width: 12),
+                    const Expanded(child: Text('Kembalian')),
+                    Text(
+                      change == null ? '—' : formatRupiah(change),
+                      style: Theme.of(context).textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ),
             ],

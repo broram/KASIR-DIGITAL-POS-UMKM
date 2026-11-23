@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/sale_transaction.dart';
 import '../utils/format_date_time.dart';
 import '../utils/format_rupiah.dart';
+import '../widgets/botanical_decor.dart';
 
 class ReceiptScreen extends StatelessWidget {
   const ReceiptScreen({super.key, required this.transaction});
@@ -41,68 +42,64 @@ class ReceiptScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Card(
-                  margin: EdgeInsets.zero,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          transaction.cashierName,
-                          style: textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 4),
-                        Text('ID transaksi: ${transaction.id}'),
-                        Text('Waktu: ${formatDateTime(transaction.createdAt)}'),
-                        const Divider(height: 28),
-                        ...transaction.items.map(
-                          (item) => Padding(
-                            padding: const EdgeInsets.only(bottom: 14),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item.product.name,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                SoftCard(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        transaction.cashierName,
+                        style: textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      Text('ID transaksi: ${transaction.id}'),
+                      Text('Waktu: ${formatDateTime(transaction.createdAt)}'),
+                      const Divider(height: 28),
+                      ...transaction.items.map(
+                        (item) => Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.product.name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      Text(
-                                        '${item.quantity} x '
-                                        '${formatRupiah(item.product.price)}',
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                    Text(
+                                      '${item.quantity} x '
+                                      '${formatRupiah(item.product.price)}',
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 12),
-                                Text(formatRupiah(item.subtotal)),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(formatRupiah(item.subtotal)),
+                            ],
                           ),
                         ),
-                        const Divider(height: 12),
-                        _ReceiptAmount(
-                          label: 'Total',
-                          value: transaction.total,
-                          emphasized: true,
-                        ),
-                        _ReceiptAmount(
-                          label: 'Uang diterima',
-                          value: transaction.amountPaid,
-                        ),
-                        _ReceiptAmount(
-                          label: 'Kembalian',
-                          value: transaction.change,
-                          emphasized: true,
-                        ),
-                      ],
-                    ),
+                      ),
+                      const Divider(height: 12),
+                      _ReceiptAmount(
+                        label: 'Total',
+                        value: transaction.total,
+                        emphasized: true,
+                      ),
+                      _ReceiptAmount(
+                        label: 'Uang diterima',
+                        value: transaction.amountPaid,
+                      ),
+                      _ReceiptAmount(
+                        label: 'Kembalian',
+                        value: transaction.change,
+                        emphasized: true,
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),

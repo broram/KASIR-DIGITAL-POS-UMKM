@@ -1,163 +1,203 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const background = Color(0xFFF7F1E3);
-  static const surfaceBeige = Color(0xFFFBF7EC);
-  static const surfaceSage = Color(0xFFC9D3C0);
-  static const surfaceSand = Color(0xFFEFE6D2);
-  static const line = Color(0xFFE9DFCB);
-  static const textPrimary = Color(0xFF1F3D2F);
-  static const textSecondary = Color(0xFF3F5045);
-  static const gold = Color(0xFFD1B574);
-  static const cream = Color(0xFFF4EDDD);
+  const AppTheme._();
 
-  static const _charcoal = textPrimary;
-  static const _canvas = background;
+  static const forest = Color(0xFF1F3D2F);
+  static const forestSoft = Color(0xFF2A4D3C);
+  static const forestDeep = Color(0xFF16301F);
+  static const teal = Color(0xFF2F5D5A);
+  static const sage = Color(0xFFC9D3C0);
+  static const brown = Color(0xFF6B4F3A);
+  static const beige = Color(0xFFEFE6D2);
+  static const cream = Color(0xFFF7F1E3);
+  static const paper = Color(0xFFFBF7EC);
+  static const gold = Color(0xFFD1B574);
+  static const goldDeep = Color(0xFF8C6F2E);
+  static const line = Color(0xFFD9CDB3);
+  static const textSecondary = Color(0xFF3F5045);
+  static const onDark = Color(0xFFF4EDDD);
+  static const onDarkMuted = Color(0xFFE9DFCB);
+  static const danger = Color(0xFF9B2C2C);
+
+  static const background = cream;
+  static const surfaceBeige = paper;
+  static const surfaceSage = sage;
+  static const surfaceSand = beige;
+  static const textPrimary = forest;
+  static const radiusCard = 24.0;
+  static const radiusField = 16.0;
+
+  static const forestGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [forestSoft, forest],
+  );
+  static const canvasGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [cream, beige],
+  );
+  static const softShadow = [
+    BoxShadow(color: Color(0x241F3D2F), blurRadius: 22, offset: Offset(0, 10)),
+  ];
+  static const deepShadow = [
+    BoxShadow(color: Color(0x471F3D2F), blurRadius: 28, offset: Offset(0, 14)),
+  ];
 
   static ThemeData get light {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: _charcoal,
-      surface: _canvas,
-      brightness: Brightness.light,
+    final scheme =
+        ColorScheme.fromSeed(
+          seedColor: forest,
+          brightness: Brightness.light,
+        ).copyWith(
+          primary: forest,
+          onPrimary: onDark,
+          secondary: teal,
+          onSecondary: onDark,
+          tertiary: brown,
+          onTertiary: onDark,
+          surface: paper,
+          onSurface: forest,
+          onSurfaceVariant: textSecondary,
+          surfaceContainerHighest: beige,
+          outline: line,
+          outlineVariant: line,
+          error: danger,
+          onError: Colors.white,
+        );
+
+    const textTheme = TextTheme(
+      displayLarge: TextStyle(
+        fontSize: 56,
+        fontWeight: FontWeight.w700,
+        height: 1.1,
+        letterSpacing: -1.2,
+      ),
+      headlineMedium: TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        height: 1.1,
+        letterSpacing: -0.6,
+      ),
+      titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+      titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      bodyLarge: TextStyle(fontSize: 16, height: 1.5),
+      bodyMedium: TextStyle(fontSize: 14, height: 1.5),
+      labelLarge: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+      labelSmall: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 1.6,
+      ),
     );
 
-    final editorialScheme = colorScheme.copyWith(
-      primary: _charcoal,
-      onPrimary: Colors.white,
-      primaryContainer: surfaceBeige,
-      onPrimaryContainer: textPrimary,
-      secondary: textSecondary,
-      onSecondary: Colors.white,
-      secondaryContainer: surfaceBeige,
-      onSecondaryContainer: textPrimary,
-      surface: background,
-      onSurface: textPrimary,
-      onSurfaceVariant: textSecondary,
-      outline: line,
-      outlineVariant: line,
-    );
+    OutlineInputBorder border(Color color, [double width = 1]) =>
+        OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusField),
+          borderSide: BorderSide(color: color, width: width),
+        );
 
-    final theme = ThemeData(
-      colorScheme: colorScheme,
+    return ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: _canvas,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: cream,
+      textTheme: textTheme.apply(bodyColor: forest, displayColor: forest),
       appBarTheme: const AppBarTheme(
-        backgroundColor: _canvas,
-        surfaceTintColor: Colors.transparent,
-        centerTitle: false,
-        foregroundColor: textPrimary,
+        backgroundColor: forest,
+        foregroundColor: onDark,
         elevation: 0,
         scrolledUnderElevation: 0,
+        centerTitle: false,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
+        ),
+        titleTextStyle: TextStyle(
+          color: onDark,
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+        ),
       ),
       cardTheme: CardThemeData(
-        color: surfaceBeige,
-        surfaceTintColor: Colors.transparent,
+        color: paper,
         elevation: 0,
+        margin: EdgeInsets.zero,
+        shadowColor: forest,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(radiusCard),
           side: const BorderSide(color: line),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        filled: false,
-        fillColor: Colors.transparent,
-        isDense: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: 12),
-        labelStyle: const TextStyle(
-          color: textSecondary,
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
+        filled: true,
+        fillColor: beige,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
         ),
-        floatingLabelStyle: const TextStyle(color: textPrimary, fontSize: 12),
-        border: const UnderlineInputBorder(borderSide: BorderSide(color: line)),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: line),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: _charcoal, width: 1.5),
-        ),
-        errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFB3261E)),
-        ),
-        focusedErrorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFFB3261E), width: 1.5),
-        ),
+        border: border(line),
+        enabledBorder: border(line),
+        focusedBorder: border(forest, 1.5),
+        errorBorder: border(danger),
+        focusedErrorBorder: border(danger, 1.5),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          minimumSize: const Size(0, 52),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-          backgroundColor: _charcoal,
-          foregroundColor: Colors.white,
+          backgroundColor: forest,
+          foregroundColor: onDark,
+          minimumSize: const Size(0, 54),
+          shape: const StadiumBorder(),
+          textStyle: textTheme.labelLarge,
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: forest,
+          foregroundColor: onDark,
+          minimumSize: const Size(0, 54),
+          shape: const StadiumBorder(),
           elevation: 0,
-          textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          textStyle: textTheme.labelLarge,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          minimumSize: const Size(0, 52),
-          foregroundColor: _charcoal,
+          foregroundColor: forest,
+          minimumSize: const Size(0, 54),
+          shape: const StadiumBorder(),
           side: const BorderSide(color: line),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          textStyle: textTheme.labelLarge,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(foregroundColor: textPrimary),
+        style: TextButton.styleFrom(
+          foregroundColor: forest,
+          minimumSize: const Size(44, 44),
+          shape: const StadiumBorder(),
+        ),
       ),
       iconButtonTheme: IconButtonThemeData(
-        style: IconButton.styleFrom(foregroundColor: textPrimary),
+        style: IconButton.styleFrom(
+          minimumSize: const Size(44, 44),
+          foregroundColor: forest,
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: paper,
+        elevation: 8,
+        shadowColor: forest,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusCard),
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: forest,
+        contentTextStyle: const TextStyle(color: onDark),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       dividerTheme: const DividerThemeData(color: line, thickness: 1, space: 1),
-      listTileTheme: const ListTileThemeData(
-        iconColor: textPrimary,
-        textColor: textPrimary,
-      ),
-      snackBarTheme: const SnackBarThemeData(
-        backgroundColor: textPrimary,
-        contentTextStyle: TextStyle(color: Colors.white),
-        behavior: SnackBarBehavior.floating,
-      ),
-      splashFactory: InkSparkle.splashFactory,
-    );
-
-    return theme.copyWith(
-      colorScheme: editorialScheme,
-      textTheme: theme.textTheme.copyWith(
-        headlineLarge: theme.textTheme.headlineLarge?.copyWith(
-          color: textPrimary,
-          fontSize: 32,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -1.2,
-          height: 1.05,
-        ),
-        headlineMedium: theme.textTheme.headlineMedium?.copyWith(
-          color: textPrimary,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.6,
-        ),
-        headlineSmall: theme.textTheme.headlineSmall?.copyWith(
-          color: textPrimary,
-          fontWeight: FontWeight.w700,
-        ),
-        titleLarge: theme.textTheme.titleLarge?.copyWith(
-          color: textPrimary,
-          fontWeight: FontWeight.w700,
-        ),
-        titleMedium: theme.textTheme.titleMedium?.copyWith(
-          color: textPrimary,
-          fontWeight: FontWeight.w600,
-        ),
-        bodyLarge: theme.textTheme.bodyLarge?.copyWith(
-          color: textPrimary,
-          height: 1.6,
-        ),
-        bodyMedium: theme.textTheme.bodyMedium?.copyWith(
-          color: textSecondary,
-          height: 1.5,
-        ),
-        bodySmall: theme.textTheme.bodySmall?.copyWith(color: textSecondary),
-        labelLarge: theme.textTheme.labelLarge?.copyWith(color: textPrimary),
-      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(color: forest),
     );
   }
 }

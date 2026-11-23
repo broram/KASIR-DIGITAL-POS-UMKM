@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../controllers/cart_controller.dart';
 import '../models/product.dart';
 import '../services/transaction_history_service.dart';
+import '../theme/app_theme.dart';
 import '../utils/format_rupiah.dart';
+import '../widgets/botanical_decor.dart';
 import 'cart_screen.dart';
 import 'transaction_history_screen.dart';
 
@@ -154,29 +156,49 @@ class _CatalogScreenState extends State<CatalogScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Belanja jadi lebih mudah',
-                                style: Theme.of(context).textTheme.headlineSmall
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                'Pilih produk untuk memulai transaksi.',
-                                style: Theme.of(context).textTheme.bodyLarge
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
+                              BotanicalPanel(
+                                padding: const EdgeInsets.all(24),
+                                leaves: const [
+                                  Positioned(
+                                    right: -24,
+                                    top: -50,
+                                    child: BotanicalLeaf(
+                                      width: 90,
+                                      height: 140,
+                                      angleDegrees: 20,
+                                      opacity: 0.22,
                                     ),
+                                  ),
+                                ],
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Belanja jadi lebih mudah',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
+                                          ?.copyWith(color: AppTheme.onDark),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      'Pilih produk untuk memulai transaksi.',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: AppTheme.onDarkMuted,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               const SizedBox(height: 20),
                               Row(
                                 children: [
                                   Icon(
                                     Icons.storefront_outlined,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary,
+                                    color: AppTheme.forest,
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
@@ -271,55 +293,52 @@ class _ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: compact ? 12 : 16,
-          vertical: 12,
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: compact ? 20 : 24,
-              backgroundColor: colorScheme.primaryContainer,
-              foregroundColor: colorScheme.onPrimaryContainer,
-              child: const Icon(Icons.inventory_2_outlined),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleSmall
-                        ?.copyWith(fontWeight: FontWeight.w700),
+    return SoftCard(
+      padding: EdgeInsets.symmetric(
+        horizontal: compact ? 12 : 16,
+        vertical: 12,
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: compact ? 20 : 24,
+            backgroundColor: colorScheme.primaryContainer,
+            foregroundColor: colorScheme.onPrimaryContainer,
+            child: const Icon(Icons.inventory_2_outlined),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  formatRupiah(product.price),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w700,
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    formatRupiah(product.price),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            IconButton.filledTonal(
-              tooltip: 'Tambah ${product.name}',
-              onPressed: onAdd,
-              icon: const Icon(Icons.add),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 8),
+          IconButton.filledTonal(
+            tooltip: 'Tambah ${product.name}',
+            onPressed: onAdd,
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }
