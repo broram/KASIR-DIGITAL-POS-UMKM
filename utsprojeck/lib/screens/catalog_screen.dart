@@ -12,6 +12,7 @@ import 'transaction_history_screen.dart';
 typedef ProductLoader = Future<List<Product>> Function();
 
 class CatalogScreen extends StatefulWidget {
+  /// Membuat halaman katalog beserta data keranjang, produk, dan riwayat.
   const CatalogScreen({
     super.key,
     required this.cartController,
@@ -28,6 +29,7 @@ class CatalogScreen extends StatefulWidget {
   final VoidCallback? onLogout;
 
   @override
+  /// Membuat state yang memuat dan menampilkan katalog produk.
   State<CatalogScreen> createState() => _CatalogScreenState();
 }
 
@@ -35,17 +37,20 @@ class _CatalogScreenState extends State<CatalogScreen> {
   late Future<List<Product>> _productsFuture;
 
   @override
+  /// Memulai pemuatan katalog saat layar pertama kali dibuat.
   void initState() {
     super.initState();
     _productsFuture = widget.loadProducts();
   }
 
+  /// Mengulang pemuatan katalog jika proses sebelumnya gagal.
   void _retryLoading() {
     setState(() {
       _productsFuture = widget.loadProducts();
     });
   }
 
+  /// Membuka halaman keranjang untuk melanjutkan transaksi.
   void _openCart() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -58,6 +63,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
     );
   }
 
+  /// Membuka halaman riwayat transaksi.
   void _openHistory() {
     final historyService = widget.historyService;
     if (historyService == null) return;
@@ -71,6 +77,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   }
 
   @override
+  /// Membangun tampilan katalog beserta status loading, error, dan data produk.
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -279,6 +286,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
 }
 
 class _ProductCard extends StatelessWidget {
+  /// Membuat kartu produk beserta aksi menambahkan ke keranjang.
   const _ProductCard({
     required this.product,
     required this.compact,
@@ -290,6 +298,7 @@ class _ProductCard extends StatelessWidget {
   final VoidCallback onAdd;
 
   @override
+  /// Membangun visual nama, harga, dan tombol tambah produk.
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -345,11 +354,13 @@ class _ProductCard extends StatelessWidget {
 }
 
 class _CatalogError extends StatelessWidget {
+  /// Membuat pesan error katalog beserta aksi coba lagi.
   const _CatalogError({required this.onRetry});
 
   final VoidCallback onRetry;
 
   @override
+  /// Menampilkan pesan kegagalan pemuatan dan tombol retry.
   Widget build(BuildContext context) {
     return Center(
       child: Padding(

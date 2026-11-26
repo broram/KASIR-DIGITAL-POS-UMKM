@@ -9,6 +9,7 @@ import '../widgets/botanical_decor.dart';
 import 'receipt_screen.dart';
 
 class PaymentScreen extends StatefulWidget {
+  /// Membuat halaman pembayaran dengan controller keranjang dan riwayat.
   const PaymentScreen({
     super.key,
     required this.cartController,
@@ -21,6 +22,7 @@ class PaymentScreen extends StatefulWidget {
   final String cashierName;
 
   @override
+  /// Membuat state untuk memproses dan menyimpan pembayaran.
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
@@ -31,19 +33,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
   bool _isConfirming = false;
 
   @override
+  /// Membebaskan TextEditingController saat halaman ditutup.
   void dispose() {
     _paymentController.dispose();
     super.dispose();
   }
 
+  /// Mengambil total pembayaran dari controller keranjang.
   int get _total => widget.cartController.total;
 
+  /// Menghitung kembalian jika nominal pembayaran sudah dimasukkan.
   int? get _change {
     final amountPaid = _amountPaid;
     if (amountPaid == null || amountPaid < _total) return null;
     return amountPaid - _total;
   }
 
+  /// Memvalidasi bahwa pembayaran bernilai cukup untuk menutup total belanja.
   String? _validatePayment(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Masukkan nominal pembayaran.';
@@ -59,6 +65,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return null;
   }
 
+  /// Memproses pembayaran, menyimpan transaksi, lalu membuka struk.
   Future<void> _submitPayment() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -138,6 +145,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   @override
+  /// Membangun form pembayaran, ringkasan total, dan tombol konfirmasi.
   Widget build(BuildContext context) {
     final change = _change;
     final colorScheme = Theme.of(context).colorScheme;

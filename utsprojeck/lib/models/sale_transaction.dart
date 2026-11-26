@@ -1,6 +1,7 @@
 import 'cart_item.dart';
 
 class SaleTransaction {
+  /// Membuat transaksi dan memvalidasi kasir, daftar item, serta pembayaran.
   SaleTransaction({
     required this.id,
     required this.createdAt,
@@ -33,10 +34,13 @@ class SaleTransaction {
   final List<CartItem> items;
   final int amountPaid;
 
+  /// Menghitung total belanja pada transaksi.
   int get total => items.fold(0, (sum, item) => sum + item.subtotal);
 
+  /// Menghitung selisih pembayaran dan total belanja sebagai kembalian.
   int get change => amountPaid - total;
 
+  /// Mengubah transaksi menjadi data JSON untuk penyimpanan atau pencatatan.
   Map<String, dynamic> toJson() => {
     'id': id,
     'createdAt': createdAt.toIso8601String(),

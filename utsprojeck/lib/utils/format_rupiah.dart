@@ -1,3 +1,4 @@
+/// Mengubah angka menjadi format mata uang Rupiah.
 String formatRupiah(int amount) {
   final digits = amount.toString();
   final grouped = digits.replaceAllMapped(

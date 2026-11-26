@@ -7,16 +7,18 @@ import '../theme/app_theme.dart';
 import '../widgets/botanical_decor.dart';
 
 class LoginScreen extends StatefulWidget {
+  /// Membuat layar login dan meneruskan controller autentikasi.
   const LoginScreen({super.key, required this.authController});
 
   final CashierAuthController authController;
 
   @override
+  /// Membuat state yang mengelola form login dan pendaftaran.
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static const _defaultCashierName = 'Ramdan';
+  static const _defaultCashierName = 'ramfinput';
 
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
@@ -28,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool get _isFirstRun => widget.authController.registeredCashier == null;
 
   @override
+  /// Menginisialisasi nama kasir pada controller teks saat halaman dibuka.
   void initState() {
     super.initState();
     _nameController = TextEditingController(
@@ -36,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  /// Membebaskan seluruh controller teks sebelum state dihancurkan.
   void dispose() {
     _nameController.dispose();
     _pinController.dispose();
@@ -43,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  /// Memvalidasi form lalu mendaftarkan atau mengautentikasi kasir.
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_isFirstRun && _pinController.text != _confirmPinController.text) {
@@ -90,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  /// Memvalidasi bahwa nama kasir tidak kosong.
   String? _validateName(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Nama kasir wajib diisi.';
@@ -97,6 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
+  /// Memvalidasi bahwa PIN terdiri dari 4 sampai 6 digit.
   String? _validatePin(String? value) {
     if (value == null || !RegExp(r'^\d{4,6}$').hasMatch(value)) {
       return 'PIN harus terdiri dari 4–6 digit.';
@@ -105,6 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  /// Membangun layout responsif untuk form login atau pendaftaran.
   Widget build(BuildContext context) {
     return Scaffold(
       body: DecoratedBox(
@@ -154,6 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  /// Membangun isi form beserta input nama, PIN, dan status error.
   Widget _buildLoginForm(BuildContext context) {
     final theme = Theme.of(context);
     final isFirstRun = _isFirstRun;

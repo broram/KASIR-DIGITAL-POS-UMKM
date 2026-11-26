@@ -1,4 +1,5 @@
 class Product {
+  /// Membuat produk dan memvalidasi nilai ID, nama, serta harga.
   Product({
     required this.id,
     required this.name,
@@ -21,6 +22,7 @@ class Product {
   final int price;
   final String? imageUrl;
 
+  /// Membuat objek Product dari data JSON dengan validasi tipe datanya.
   factory Product.fromJson(Map<String, dynamic> json) {
     final id = _parseInt(json['id'], 'id');
     final name = json['name'];
@@ -46,6 +48,7 @@ class Product {
     );
   }
 
+  /// Mengubah objek Product menjadi data JSON.
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
@@ -54,6 +57,7 @@ class Product {
   };
 }
 
+/// Membaca nilai objek JSON sebagai integer dan melempar error jika formatnya salah.
 int _parseInt(Object? value, String fieldName) {
   if (value is int) return value;
   if (value is num && value == value.roundToDouble()) return value.toInt();

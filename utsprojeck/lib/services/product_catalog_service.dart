@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../models/product.dart';
 
 class ProductCatalogService {
+  /// Memuat daftar produk dari assets dan mengubahnya menjadi objek Product.
   static Future<List<Product>> loadProducts() async {
     final jsonString = await rootBundle.loadString('assets/data/products.json');
     final decoded = jsonDecode(jsonString);

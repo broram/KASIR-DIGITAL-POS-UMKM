@@ -6,10 +6,12 @@ import '../theme/app_theme.dart';
 
 const double kDesktopBreakpoint = 900;
 
+/// Menentukan apakah lebar layar cukup untuk menampilkan tata letak desktop.
 bool isDesktopWidth(BuildContext context) =>
     MediaQuery.sizeOf(context).width >= kDesktopBreakpoint;
 
 class BotanicalLeaf extends StatelessWidget {
+  /// Membuat dekorasi daun yang dapat diputar, diwarnai, dan dibuat transparan.
   const BotanicalLeaf({
     super.key,
     required this.width,
@@ -26,6 +28,7 @@ class BotanicalLeaf extends StatelessWidget {
   final double opacity;
 
   @override
+  /// Membangun visual daun botani tanpa menyerap interaksi pengguna.
   Widget build(BuildContext context) {
     return ExcludeSemantics(
       child: IgnorePointer(
@@ -63,6 +66,7 @@ class BotanicalLeaf extends StatelessWidget {
 }
 
 class BotanicalPanel extends StatelessWidget {
+  /// Membuat panel hijau dengan bayangan, sudut melengkung, dan dekorasi daun.
   const BotanicalPanel({
     super.key,
     required this.child,
@@ -77,6 +81,7 @@ class BotanicalPanel extends StatelessWidget {
   final List<Widget> leaves;
 
   @override
+  /// Membangun panel yang menumpuk dekorasi di belakang konten.
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -98,6 +103,7 @@ class BotanicalPanel extends StatelessWidget {
 }
 
 class SoftCard extends StatelessWidget {
+  /// Membuat kartu lembut yang opsional dapat diklik.
   const SoftCard({
     super.key,
     required this.child,
@@ -112,6 +118,7 @@ class SoftCard extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
+  /// Membangun kartu dengan bayangan dan efek sentuhan.
   Widget build(BuildContext context) {
     final radius = BorderRadius.circular(AppTheme.radiusCard);
     return DecoratedBox(
@@ -133,6 +140,7 @@ class SoftCard extends StatelessWidget {
 }
 
 class DesktopCashierLayout extends StatelessWidget {
+  /// Membuat tata letak desktop dengan header, katalog, dan keranjang.
   const DesktopCashierLayout({
     super.key,
     required this.header,
@@ -147,6 +155,7 @@ class DesktopCashierLayout extends StatelessWidget {
   final double cartWidth;
 
   @override
+  /// Membangun susunan horizontal khusus tampilan desktop.
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -177,6 +186,7 @@ class DesktopCashierLayout extends StatelessWidget {
 }
 
 class DesktopSplitLayout extends StatelessWidget {
+  /// Membuat tata letak dua sisi untuk halaman login dan form.
   const DesktopSplitLayout({
     super.key,
     required this.hero,
@@ -191,6 +201,7 @@ class DesktopSplitLayout extends StatelessWidget {
   final double formMaxWidth;
 
   @override
+  /// Membangun panel ilustrasi dan form yang saling bersebelahan.
   Widget build(BuildContext context) {
     return Row(
       children: [

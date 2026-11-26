@@ -7,11 +7,13 @@ import '../utils/format_rupiah.dart';
 import 'receipt_screen.dart';
 
 class TransactionHistoryScreen extends StatefulWidget {
+  /// Membuat halaman riwayat dan menerima service penyimpanan transaksi.
   const TransactionHistoryScreen({super.key, required this.historyService});
 
   final TransactionHistoryService historyService;
 
   @override
+  /// Membuat state untuk memuat dan menampilkan riwayat.
   State<TransactionHistoryScreen> createState() =>
       _TransactionHistoryScreenState();
 }
@@ -20,17 +22,20 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   late Future<List<SaleTransaction>> _transactionsFuture;
 
   @override
+  /// Memulai pemuatan daftar transaksi saat layar dibuka.
   void initState() {
     super.initState();
     _transactionsFuture = widget.historyService.loadAll();
   }
 
+  /// Mengulang pemuatan riwayat setelah terjadi kegagalan.
   void _retryLoading() {
     setState(() {
       _transactionsFuture = widget.historyService.loadAll();
     });
   }
 
+  /// Membuka halaman struk untuk transaksi yang dipilih.
   void _openReceipt(SaleTransaction transaction) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -40,6 +45,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   }
 
   @override
+  /// Membangun tampilan riwayat beserta status loading dan error.
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<SaleTransaction>>(
@@ -81,11 +87,13 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 }
 
 class _HistoryHeader extends StatelessWidget {
+  /// Membuat header halaman riwayat beserta tombol kembali.
   const _HistoryHeader({required this.onBack});
 
   final VoidCallback onBack;
 
   @override
+  /// Membangun header hijau dengan judul halaman riwayat.
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -160,11 +168,13 @@ class _HistoryHeader extends StatelessWidget {
 }
 
 class _HistoryError extends StatelessWidget {
+  /// Membuat tampilan error riwayat beserta tombol pemuatan ulang.
   const _HistoryError({required this.onRetry});
 
   final VoidCallback onRetry;
 
   @override
+  /// Menampilkan pesan kegagalan dan aksi retry.
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
@@ -192,12 +202,14 @@ class _HistoryError extends StatelessWidget {
 }
 
 class _HistoryList extends StatelessWidget {
+  /// Membuat daftar transaksi beserta aksi membuka struk.
   const _HistoryList({required this.transactions, required this.onOpen});
 
   final List<SaleTransaction> transactions;
   final ValueChanged<SaleTransaction> onOpen;
 
   @override
+  /// Membangun daftar transaksi atau pesan jika belum ada data.
   Widget build(BuildContext context) {
     if (transactions.isEmpty) {
       return const Center(

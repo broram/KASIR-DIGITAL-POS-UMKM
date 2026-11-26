@@ -6,11 +6,13 @@ import '../utils/format_rupiah.dart';
 import '../widgets/botanical_decor.dart';
 
 class ReceiptScreen extends StatelessWidget {
+  /// Membuat halaman struk untuk satu transaksi yang selesai.
   const ReceiptScreen({super.key, required this.transaction});
 
   final SaleTransaction transaction;
 
   @override
+  /// Membangun tampilan struk, rincian item, dan tombol kembali.
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
@@ -138,6 +140,7 @@ class ReceiptScreen extends StatelessWidget {
 }
 
 class _ReceiptAmount extends StatelessWidget {
+  /// Membuat baris label dan nominal pada ringkasan struk.
   const _ReceiptAmount({
     required this.label,
     required this.value,
@@ -149,6 +152,7 @@ class _ReceiptAmount extends StatelessWidget {
   final bool emphasized;
 
   @override
+  /// Membangun satu baris nominal struk dengan format Rupiah.
   Widget build(BuildContext context) {
     final style = emphasized
         ? Theme.of(context).textTheme.titleMedium

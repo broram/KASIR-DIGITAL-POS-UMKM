@@ -7,6 +7,7 @@ import '../widgets/botanical_decor.dart';
 import 'payment_screen.dart';
 
 class CartScreen extends StatelessWidget {
+  /// Membuat halaman keranjang beserta controller dan akses ke pembayaran.
   const CartScreen({
     super.key,
     required this.cartController,
@@ -19,6 +20,7 @@ class CartScreen extends StatelessWidget {
   final String cashierName;
 
   @override
+  /// Membangun tampilan daftar item, total belanja, dan tombol checkout.
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Keranjang')),

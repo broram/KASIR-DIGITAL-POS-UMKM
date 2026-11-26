@@ -6,16 +6,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract interface class CashierCredentialStorage {
+  /// Membaca nilai dari penyimpanan aman berdasarkan kunci.
   Future<String?> read(String key);
 
+  /// Menyimpan nilai ke penyimpanan aman berdasarkan kunci.
   Future<void> write(String key, String value);
 }
 
 abstract interface class CashierAuthService {
+  /// Mengambil nama kasir yang terdaftar.
   Future<String?> getRegisteredCashier();
 
+  /// Mendaftarkan nama dan PIN kasir.
   Future<void> register({required String name, required String pin});
 
+  /// Memeriksa kecocokan nama dan PIN kasir.
   Future<bool> authenticate({required String name, required String pin});
 }
 
@@ -37,6 +42,7 @@ class LocalCashierAuthService implements CashierAuthService {
   final CashierCredentialStorage _storage;
 
   @override
+  /// Membaca profil kasir dan memastikan data kredensial lengkap.
   Future<String?> getRegisteredCashier() async {
     try {
       final name = await _storage.read(_cashierNameKey);
@@ -58,6 +64,7 @@ class LocalCashierAuthService implements CashierAuthService {
   }
 
   @override
+  /// Membuat salt acak, menghasilkan hash PIN, lalu menyimpan profil kasir.
   Future<void> register({required String name, required String pin}) async {
     final normalizedName = name.trim();
     if (normalizedName.isEmpty) {
@@ -82,6 +89,7 @@ class LocalCashierAuthService implements CashierAuthService {
   }
 
   @override
+  /// Membandingkan nama dan hash PIN untuk melakukan autentikasi kasir.
   Future<bool> authenticate({required String name, required String pin}) async {
     final storedName = await getRegisteredCashier();
     if (storedName == null ||
@@ -112,6 +120,7 @@ class LocalCashierAuthService implements CashierAuthService {
     return _constantTimeEquals(expectedHash, actualHash);
   }
 
+  /// Membuat hash PIN yang aman menggunakan PBKDF2 dan salt acak.
   Future<List<int>> _hashPin(String pin, List<int> salt) async {
     final key = await _pinHasher.deriveKey(
       secretKey: SecretKey(utf8.encode(pin)),
@@ -120,8 +129,10 @@ class LocalCashierAuthService implements CashierAuthService {
     return key.extractBytes();
   }
 
+  /// Memastikan PIN hanya terdiri dari 4 sampai 6 digit angka.
   bool _isValidPin(String pin) => RegExp(r'^\d{4,6}$').hasMatch(pin);
 
+  /// Membandingkan dua hash dengan waktu komputasi yang konsisten.
   bool _constantTimeEquals(List<int> first, List<int> second) {
     if (first.length != second.length) return false;
     var difference = 0;
@@ -133,14 +144,17 @@ class LocalCashierAuthService implements CashierAuthService {
 }
 
 class _FlutterSecureCashierStorage implements CashierCredentialStorage {
+  /// Membungkus penyimpanan aman Flutter untuk kebutuhan autentikasi.
   const _FlutterSecureCashierStorage(this._storage);
 
   final FlutterSecureStorage _storage;
 
   @override
+  /// Membaca satu data berdasarkan kunci dari penyimpanan aman.
   Future<String?> read(String key) => _storage.read(key: key);
 
   @override
+  /// Menulis satu data berdasarkan kunci ke penyimpanan aman.
   Future<void> write(String key, String value) =>
       _storage.write(key: key, value: value);
 }

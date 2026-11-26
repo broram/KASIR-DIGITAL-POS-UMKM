@@ -12,6 +12,7 @@ import 'services/cashier_auth_service.dart';
 import 'services/transaction_history_service.dart';
 import 'theme/app_theme.dart';
 
+/// Menjalankan aplikasi dan menyiapkan database SQLite untuk desktop.
 void main() {
   if (!kIsWeb &&
       {
@@ -26,9 +27,11 @@ void main() {
 }
 
 class KasirApp extends StatefulWidget {
+  /// Membuat widget utama aplikasi kasir.
   const KasirApp({super.key});
 
   @override
+  /// Membuat state yang menyimpan controller global aplikasi.
   State<KasirApp> createState() => _KasirAppState();
 }
 
@@ -38,6 +41,7 @@ class _KasirAppState extends State<KasirApp> {
   late final TransactionHistoryService _historyService;
 
   @override
+  /// Membuat controller keranjang, autentikasi, dan riwayat transaksi saat state dimulai.
   void initState() {
     super.initState();
     _cartController = CartController();
@@ -48,6 +52,7 @@ class _KasirAppState extends State<KasirApp> {
   }
 
   @override
+  /// Membebaskan resource pada controller sebelum state dihapus.
   void dispose() {
     _cartController.dispose();
     _authController.dispose();
@@ -55,6 +60,7 @@ class _KasirAppState extends State<KasirApp> {
   }
 
   @override
+  /// Membangun konfigurasi MaterialApp beserta tema dan halaman awal.
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Kasir UMKM',
@@ -69,6 +75,7 @@ class _KasirAppState extends State<KasirApp> {
 }
 
 class _AppEntry extends StatefulWidget {
+  /// Menerima controller dan service yang dibagikan ke seluruh aplikasi.
   const _AppEntry({
     required this.cartController,
     required this.authController,
@@ -80,6 +87,7 @@ class _AppEntry extends StatefulWidget {
   final TransactionHistoryService historyService;
 
   @override
+  /// Membuat state untuk memeriksa status inisialisasi aplikasi.
   State<_AppEntry> createState() => _AppEntryState();
 }
 
@@ -87,11 +95,13 @@ class _AppEntryState extends State<_AppEntry> {
   late Future<void> _initialization;
 
   @override
+  /// Memulai proses pemuatan data login kasir saat halaman dibuka.
   void initState() {
     super.initState();
     _initialization = widget.authController.initialize();
   }
 
+  /// Mengulang proses inisialisasi ketika pemuatan data sebelumnya gagal.
   void _retryInitialization() {
     setState(() {
       _initialization = widget.authController.initialize();
@@ -99,6 +109,7 @@ class _AppEntryState extends State<_AppEntry> {
   }
 
   @override
+  /// Menampilkan loading, layar error, login, atau katalog berdasarkan status aplikasi.
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
       future: _initialization,

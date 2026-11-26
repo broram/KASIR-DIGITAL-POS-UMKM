@@ -92,6 +92,7 @@ class AppTheme {
       ),
     );
 
+    // Membuat garis input secara konsisten agar tampilan form seragam.
     OutlineInputBorder border(Color color, [double width = 1]) =>
         OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusField),

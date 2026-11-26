@@ -7,12 +7,14 @@ import '../models/product.dart';
 import '../models/sale_transaction.dart';
 
 class TransactionHistoryService {
+  /// Membuat service riwayat dengan factory dan lokasi database opsional.
   TransactionHistoryService({this.databaseFactory, this.databasePath});
 
   final sqflite.DatabaseFactory? databaseFactory;
   final String? databasePath;
   Future<sqflite.Database>? _database;
 
+  /// Menyimpan header transaksi dan seluruh item pembeliannya dalam satu transaksi database.
   Future<void> save(SaleTransaction transaction) async {
     try {
       final database = await _getDatabase();
@@ -49,6 +51,7 @@ class TransactionHistoryService {
     }
   }
 
+  /// Memuat seluruh riwayat transaksi beserta itemnya dari database.
   Future<List<SaleTransaction>> loadAll() async {
     try {
       final database = await _getDatabase();
@@ -102,6 +105,7 @@ class TransactionHistoryService {
     }
   }
 
+  /// Menutup koneksi database yang masih aktif dan menghapus referensi cache-nya.
   Future<void> close() async {
     final databaseFuture = _database;
     if (databaseFuture == null) return;
@@ -110,10 +114,12 @@ class TransactionHistoryService {
     _database = null;
   }
 
+  /// Mengambil koneksi database yang sudah ada atau membukanya bila belum tersedia.
   Future<sqflite.Database> _getDatabase() {
     return _database ??= _openDatabase();
   }
 
+  /// Membuka database dan membuat tabel transaksi beserta item transaksinya.
   Future<sqflite.Database> _openDatabase() async {
     final resolvedDatabasePath =
         databasePath ??
@@ -160,10 +166,12 @@ class TransactionHistoryService {
 }
 
 class TransactionPersistenceException implements Exception {
+  /// Membuat exception yang berisi pesan kegagalan penyimpanan atau pembacaan.
   const TransactionPersistenceException(this.message);
 
   final String message;
 
   @override
+  /// Mengembalikan pesan exception sebagai teks.
   String toString() => message;
 }
